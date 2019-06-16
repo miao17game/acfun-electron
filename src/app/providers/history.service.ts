@@ -34,6 +34,21 @@ export class HistoryService {
     }
   }
 
+  replace(path: string) {
+    if (this.canForward) {
+      this.stack = this.stack.slice(0, this.index + 1);
+      this.stack.push(path);
+      this.index = this.stack.length;
+    } else {
+      this.stack[this.stack.length - 1] = path;
+      this.index = this.stack.length;
+    }
+  }
+
+  replaceHistory(path: string) {
+    this.stack[this.index - 1] = path;
+  }
+
   getBack() {
     if (this.canBack) {
       this.index = this.index - 1;

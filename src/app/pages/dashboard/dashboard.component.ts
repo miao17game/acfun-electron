@@ -16,9 +16,9 @@ export class DashboardComponent implements OnInit {
     return this.ctx.datasets.dashboard;
   }
 
-  constructor(private ctx: ContextService) {}
+  constructor(private ctx: ContextService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async onRefresh() {
     this.actions.resetLoading(true);

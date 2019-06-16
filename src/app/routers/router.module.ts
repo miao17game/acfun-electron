@@ -5,6 +5,7 @@ import { DashboardComponent } from "../pages/dashboard/dashboard.component";
 import { LayoutComponent } from "../pages/shared/layout/layout.component";
 import { PreferenceComponent } from "../pages/preference/preference.component";
 import { UserCenterComponent } from "../pages/user-center/user.component";
+import { ContentComponent } from "../pages/content/content.component";
 
 const routes: Routes = [
   {
@@ -14,7 +15,12 @@ const routes: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "home"
+        redirectTo: `content`
+      },
+      {
+        path: "content",
+        component: ContentComponent,
+        data: { title: "内容" }
       },
       {
         path: "home",
@@ -44,4 +50,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { useHash: false })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

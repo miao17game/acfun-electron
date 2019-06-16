@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
+import { WebContentContext } from "../../../models/content.model";
 
 @Component({
   selector: "app-layout",
@@ -9,13 +10,17 @@ import { CoreService } from "../../../providers/core.service";
   styleUrls: ["./style.scss"]
 })
 export class LayoutComponent implements OnInit {
-  public showMenu = false;
-  public showMsg = true;
+  public showMenu = true;
+  public showMsg = false;
   public urls = buildRoutes();
   public actions = buildActions(this);
 
+  public get isWebContent() {
+    return this.router.url.startsWith("/content");
+  }
+
   public get currentPath() {
-    return this.router.url;
+    return !this.isWebContent ? this.router.url : "/" + this.webContent.currentSrc;
   }
 
   public get canGoBack() {
@@ -26,11 +31,11 @@ export class LayoutComponent implements OnInit {
     return this.history.canForward;
   }
 
-  constructor(private router: Router, private history: HistoryService, private core: CoreService) {
+  constructor(private router: Router, private history: HistoryService, private core: CoreService, private webContent: WebContentContext) {
     this.core.initRouter(router, this.history.decide.bind(this.history));
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
@@ -40,14 +45,26 @@ export class LayoutComponent implements OnInit {
     this.showMsg = !this.showMsg;
   }
 
+  private onNavigationActionInvoke(method: "forward" | "back") {
+    const url = this.history[method === "back" ? "getBack" : "getForward"]();
+    const isWebContent = url.startsWith("/content?src=");
+    const alreayInWebContent = this.isWebContent;
+    if (isWebContent && alreayInWebContent) {
+      return this.webContent.currentWebview[method === "back" ? "goBack" : "goForward"]();
+    }
+    if (isWebContent && !alreayInWebContent) {
+      this.webContent.updateSrc(decodeURIComponent(url.substring(13)));
+      return this.router.navigateByUrl(url);
+    }
+    return this.router.navigateByUrl(url);
+  }
+
   onBackClick() {
-    const url = this.history.getBack();
-    this.router.navigateByUrl(url);
+    return this.onNavigationActionInvoke("back");
   }
 
   onForwardClick() {
-    const url = this.history.getForward();
-    this.router.navigateByUrl(url);
+    return this.onNavigationActionInvoke("forward");
   }
 
   onDebugClick() {
@@ -97,7 +114,8 @@ function buildActions(target: LayoutComponent) {
 const routes = {
   home: "首页",
   dashboard: "工作台",
-  preference: "偏好设置"
+  preference: "偏好设置",
+  content: "内容"
 };
 
 function buildRoutes(): [string, string][] {

@@ -1,0 +1,28 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+
+.electron-webview-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex: 1;
+
+    .electron-loading-container {
+        position: absolute;
+        
+        padding-left: calc(50% - 32px);
+        padding-right: calc(50% - 32px);
+        padding-top: calc(50vh - 58px);
+        padding-bottom: calc(50vh - 58px);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .electron-webview {
+        width: 100%;
+        flex: 1;
+    }
+}
