@@ -9,20 +9,10 @@ const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
 
 function createWindow() {
-  // const electronScreen = screen;
-  // const size = electronScreen.getPrimaryDisplay().workAreaSize;
-
-  // const screenWidth = size.width;
-  // const screenHeight = size.height;
-
-  // Create the browser window.
   win = new BrowserWindow({
-    // x: 0,
-    // y: 0,
-    // width: size.width,
-    // height: size.height,
-    width: 1280,
-    height: 728,
+    width: 1600,
+    height: 1080,
+    frame: process.platform === "win32" ? false : true,
     webPreferences: {
       nodeIntegration: true
     }

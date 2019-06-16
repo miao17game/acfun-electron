@@ -10,7 +10,7 @@ import { WebContentContext } from "../../../models/content.model";
   styleUrls: ["./style.scss"]
 })
 export class LayoutComponent implements OnInit {
-  public showMenu = true;
+  public showMenu = false;
   public showMsg = false;
   public urls = buildRoutes();
   public actions = buildActions(this);
@@ -87,21 +87,16 @@ function buildActions(target: LayoutComponent) {
       class: "icon-size-16",
       onclick: target.onDebugClick.bind(target)
     },
-    usercenter: {
-      type: "user-circle",
-      class: "icon-size-17",
-      onclick: target.onUserCenterClick.bind(target)
-    },
     settings: {
       type: "cog",
       class: "icon-size-19",
       onclick: target.onSettingsClick.bind(target)
     },
-    message: {
-      type: "comments",
-      class: "icon-size-19",
-      onclick: target.onMessageBarClick.bind(target)
-    },
+    // message: {
+    //   type: "comments",
+    //   class: "icon-size-19",
+    //   onclick: target.onMessageBarClick.bind(target)
+    // },
     menu: {
       type: "navicon",
       class: "icon-size-18",
@@ -112,10 +107,8 @@ function buildActions(target: LayoutComponent) {
 }
 
 const routes = {
-  home: "首页",
-  dashboard: "工作台",
+  content: "认真你就输了",
   preference: "偏好设置",
-  content: "内容"
 };
 
 function buildRoutes(): [string, string][] {

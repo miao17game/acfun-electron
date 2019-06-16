@@ -4,6 +4,6 @@
     </div>
     <webview *ngIf="init" class="electron-webview" [src]="currentPath" (bootstrap)="onBootstrap($event)"
         (startLoading)="onLoadingChanged($event)" (contentLoaded)="onLoadingChanged(false)"
-        (navigationStop)="onNavigationStop($event)">
+        (navigationStop)="onNavigationStop($event)" (titleChange)="onTitleChange($event)">
     </webview>
 </div>

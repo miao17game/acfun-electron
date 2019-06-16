@@ -3,6 +3,7 @@ import { WebContentContext } from "../../models/content.model";
 import { HistoryService } from "../../providers/history.service";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
+import { Title } from "@angular/platform-browser";
 
 @Component({
     selector: "app-content",
@@ -16,7 +17,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     private preventUpdate = false;
     private subscription!: Subscription;
 
-    constructor(private webContent: WebContentContext, private history: HistoryService, private route: ActivatedRoute) {
+    constructor(private webContent: WebContentContext, private history: HistoryService, private route: ActivatedRoute, private title: Title) {
         this.subscription = this.route.queryParams.subscribe(({ src }) => {
             this.preventUpdate = true;
             this.currentPath = src || this.webContent.currentSrc;
@@ -47,10 +48,14 @@ export class ContentComponent implements OnInit, OnDestroy {
     }
 
     onNavigationStop(src: string) {
-        console.log(src);
         this.webContent.updateSrc(src);
+        this.webContent.updateLoading(false);
         if (this.preventUpdate) return this.preventUpdate = false;
         const route = `/content?src=${encodeURIComponent(src)}`;
         setTimeout(() => this.history.push(route));
+    }
+
+    onTitleChange(title: string) {
+        this.title.setTitle(title);
     }
 }

@@ -4,13 +4,15 @@ import { CoreService } from "../providers/core.service";
 interface IWebContentState {
     currentSrc: string;
     webview: any;
+    loading: boolean;
 }
 
 @Context()
 export class WebContentContext extends Actions<IWebContentState> {
     protected readonly initial: IWebContentState = {
-        currentSrc: 'https://www.acfun.cn/member/#area=splash',
-        webview: {}
+        currentSrc: "https://www.acfun.cn/",
+        webview: {},
+        loading: false
     };
 
     public get currentSrc() {
@@ -19,6 +21,10 @@ export class WebContentContext extends Actions<IWebContentState> {
 
     public get currentWebview() {
         return this.subject.getValue().webview || {};
+    }
+
+    public get isLinked() {
+        return !this.subject.getValue().loading;
     }
 
     constructor(private core: CoreService) {
@@ -38,6 +44,13 @@ export class WebContentContext extends Actions<IWebContentState> {
         this.subject.next({
             ...this.last,
             currentSrc: src
+        });
+    }
+
+    public updateLoading(loading: boolean) {
+        this.subject.next({
+            ...this.last,
+            loading
         });
     }
 }

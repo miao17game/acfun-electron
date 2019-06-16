@@ -36,6 +36,9 @@ export class WebviewDirective implements OnChanges {
   @Output()
   public navigationStop = new EventEmitter<string>();
 
+  @Output()
+  public titleChange = new EventEmitter<string>();
+
   private get webview(): INativeWebview {
     this.bootstrap.emit(this.el.nativeElement);
     return this.el.nativeElement;
@@ -66,6 +69,9 @@ export class WebviewDirective implements OnChanges {
     });
     this.webview.addEventListener("did-navigate-in-page", (event: any) => {
       this.navigationStop.emit(event.url);
+    });
+    this.webview.addEventListener("page-title-updated", (event: any) => {
+      this.titleChange.emit(event.title);
     });
   }
 

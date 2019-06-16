@@ -10,4 +10,4 @@ import { WebviewDirective } from "./webview.directive";
   exports: [DefaultValueDirective, IconDirective, WebviewDirective],
   providers: []
 })
-export class DirectivesModule {}
+export class DirectivesModule { }

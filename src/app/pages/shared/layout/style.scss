@@ -88,9 +88,11 @@ $leave-duration: 0.25s;
     box-shadow: 0px 0px 8px #00000090;
     box-sizing: border-box;
     min-height: 50px;
+    -webkit-app-region: drag;
 
     .back-group {
       box-sizing: border-box;
+      -webkit-app-region: no-drag;
 
       .back-button {
         cursor: pointer;
@@ -133,6 +135,8 @@ $leave-duration: 0.25s;
         padding: 0 16px;
         line-height: 32px;
         color: $primary-dead-color;
+        max-width: 680px;
+        -webkit-app-region: no-drag;
 
         .address-scope {
           color: $safe-color;
@@ -147,6 +151,7 @@ $leave-duration: 0.25s;
     .menu-group {
       text-align: right;
       box-sizing: border-box;
+      -webkit-app-region: no-drag;
 
       .menu-button {
         cursor: pointer;

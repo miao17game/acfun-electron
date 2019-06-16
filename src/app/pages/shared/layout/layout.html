@@ -10,8 +10,8 @@
     </div>
     <div class="address-group">
       <div class="address-panel">
-        <icon type="unlink"></icon>
-        <span class="address-scope"> xiaokuaiji</span>
+        <icon [type]="!isWebContent? 'unlink': 'link'"></icon>
+        <span class="address-scope"> {{ isWebContent? 'AcFun': 'application' }}</span>
         <span class="address-split"> | </span>
         <span>{{ currentPath | childUrl: "" }}</span>
       </div>
@@ -30,12 +30,8 @@
       <div class="message-item">暂时没有新消息。</div>
     </div>
     <div class="section right-section" [ngClass]="{ 'no-display': !showMenu }">
-      <div
-        *ngFor="let eachUrl of urls"
-        [routerLink]="eachUrl[0]"
-        routerLinkActive="router-link-active"
-        class="router-link"
-      >
+      <div *ngFor="let eachUrl of urls" [routerLink]="eachUrl[0]" routerLinkActive="router-link-active"
+        class="router-link">
         <span>{{ eachUrl[1] }}</span>
       </div>
     </div>
