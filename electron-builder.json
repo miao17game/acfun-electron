@@ -1,0 +1,19 @@
+{
+  "productName": "xiaokuaiji.electron",
+  "directories": {
+    "output": "release/"
+  },
+  "files": ["build/**/*", "dist/**/*"],
+  "win": {
+    "icon": "dist",
+    "target": ["portable"]
+  },
+  "mac": {
+    "icon": "dist",
+    "target": ["dmg"]
+  },
+  "linux": {
+    "icon": "dist",
+    "target": ["AppImage"]
+  }
+}

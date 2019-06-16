@@ -1,2 +1,2 @@
-# acfun-electron
-acfun-electron
+# acfun.ng-electron
+RT

@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+a {
+  color: #1f67d3;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.global-theme {
+  background-color: transparent;
+  font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+}

@@ -1,0 +1,37 @@
+.main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .actions-group {
+    padding: 12px;
+    padding-bottom: 4px;
+  }
+
+  .folder-header-group {
+    padding: 4px;
+    padding-bottom: 0;
+    padding-left: 0;
+  }
+
+  .file-flex-group {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 6px;
+    padding-left: 6px;
+
+    .file-name {
+      cursor: pointer;
+    }
+  }
+
+  .root-not-exist {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 12px;
+
+    span {
+      line-height: 24px;
+    }
+  }
+}
