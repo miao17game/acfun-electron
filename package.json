@@ -2,7 +2,7 @@
   "name": "acfun.ng-electron",
   "version": "1.0.0",
   "main": "build/main.js",
-  "repository": "https://github.com/miao17game/xiaokuaiji.electron.git",
+  "repository": "https://github.com/miao17game/acfun-electron.git",
   "author": "Big Mogician <sunaoran@youzan.com>",
   "license": "MIT",
   "scripts": {
