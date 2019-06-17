@@ -38,8 +38,18 @@
   </div>
   <div class="main">
     <div class="section content-root">
-      <router-outlet></router-outlet>
-      <router-outlet outlet="webview"></router-outlet>
+      <div
+        class="section-outlet"
+        [ngClass]="{ 'outlet-hidden': !isWebviewOutletShow }"
+      >
+        <router-outlet name="webview"></router-outlet>
+      </div>
+      <div
+        class="section-outlet"
+        [ngClass]="{ 'outlet-hidden': !isPrimaryOutletShow }"
+      >
+        <router-outlet></router-outlet>
+      </div>
     </div>
     <div
       class="section right-section msg-box"
@@ -50,8 +60,7 @@
     <div class="section right-section" [ngClass]="{ 'no-display': !showMenu }">
       <div
         *ngFor="let eachUrl of urls"
-        [routerLink]="eachUrl[0]"
-        routerLinkActive="router-link-active"
+        (click)="eachUrl[0]()"
         class="router-link"
       >
         <span>{{ eachUrl[1] }}</span>

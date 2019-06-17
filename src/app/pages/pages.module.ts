@@ -9,6 +9,7 @@ import { DirectivesModule } from "../utils/directives/directives.module";
 
 @NgModule({
   declarations: [LayoutComponent, PreferenceComponent, ContentComponent],
-  imports: [RouterModule, CommonModule, ComponentsModule, DirectivesModule]
+  imports: [RouterModule, CommonModule, ComponentsModule, DirectivesModule],
+  exports: [LayoutComponent]
 })
-export class PagesModule { }
+export class PagesModule {}

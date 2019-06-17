@@ -5,10 +5,13 @@ import { AppConfig } from "../../environments/environment";
 
 @Component({
   selector: "app-root",
-  template: "<router-outlet></router-outlet>"
+  template: "<app-layout></app-layout>"
 })
 export class AppComponent {
-  constructor(public electronService: ElectronService, private translate: TranslateService) {
+  constructor(
+    public electronService: ElectronService,
+    private translate: TranslateService
+  ) {
     translate.setDefaultLang("en");
     console.log("AppConfig", AppConfig);
 

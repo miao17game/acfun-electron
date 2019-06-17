@@ -1,8 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 import { WebContentContext } from "../../../models/content.model";
+
+const routes = {
+  content: {
+    label: "认真你就输了",
+    action: (router: Router) => {
+      router.navigate([{ outlets: { webview: ["content"], primary: null } }]);
+    }
+  },
+  preference: {
+    label: "偏好设置",
+    action: (router: Router) => {
+      router.navigate([{ outlets: { primary: ["preference"] } }]);
+    }
+  }
+};
 
 @Component({
   selector: "app-layout",
@@ -12,15 +27,25 @@ import { WebContentContext } from "../../../models/content.model";
 export class LayoutComponent implements OnInit {
   public showMenu = false;
   public showMsg = false;
-  public urls = buildRoutes();
+  public urls: [() => any, string][] = [];
   public actions = buildActions(this);
 
+  public get isPrimaryOutletShow() {
+    return getPrimaryUrl(this.router.url) !== "/";
+  }
+
+  public get isWebviewOutletShow() {
+    return /\(webview:.+\)/g.test(this.router.url);
+  }
+
   public get isWebContent() {
-    return this.router.url.startsWith("/content");
+    return !this.isPrimaryOutletShow;
   }
 
   public get currentPath() {
-    return !this.isWebContent ? this.router.url : "/" + this.webContent.currentSrc;
+    return !this.isWebContent
+      ? getPrimaryUrl(this.router.url)
+      : "/" + this.webContent.currentSrc;
   }
 
   public get canGoBack() {
@@ -31,11 +56,19 @@ export class LayoutComponent implements OnInit {
     return this.history.canForward;
   }
 
-  constructor(private router: Router, private history: HistoryService, private core: CoreService, private webContent: WebContentContext) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private history: HistoryService,
+    private core: CoreService,
+    private webContent: WebContentContext
+  ) {
     this.core.initRouter(router, this.history.decide.bind(this.history));
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.urls = buildRoutes(this.router);
+  }
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
@@ -50,7 +83,9 @@ export class LayoutComponent implements OnInit {
     const isWebContent = url.startsWith("/content?src=");
     const alreayInWebContent = this.isWebContent;
     if (isWebContent && alreayInWebContent) {
-      return this.webContent.currentWebview[method === "back" ? "goBack" : "goForward"]();
+      return this.webContent.currentWebview[
+        method === "back" ? "goBack" : "goForward"
+      ]();
     }
     if (isWebContent && !alreayInWebContent) {
       this.webContent.updateSrc(decodeURIComponent(url.substring(13)));
@@ -72,11 +107,7 @@ export class LayoutComponent implements OnInit {
   }
 
   onSettingsClick() {
-    this.router.navigateByUrl("/preference");
-  }
-
-  onUserCenterClick() {
-    this.router.navigateByUrl("/usercenter");
+    this.router.navigate([{ outlets: { primary: ["preference"] } }]);
   }
 }
 
@@ -106,11 +137,17 @@ function buildActions(target: LayoutComponent) {
   return Object.keys(actions).map(k => actions[k]);
 }
 
-const routes = {
-  content: "认真你就输了",
-  preference: "偏好设置",
-};
+function buildRoutes(router: Router): [() => any, string][] {
+  return Object.keys(routes).map<[() => any, string]>(k => {
+    const item = routes[k];
+    if ("action" in item) {
+      return [() => item.action(router), item.label];
+    }
+    return [() => router.navigateByUrl(`/${k}`), item.label];
+  });
+}
 
-function buildRoutes(): [string, string][] {
-  return Object.keys(routes).map<[string, string]>(k => [`/${k}`, routes[k]]);
+function getPrimaryUrl(url: string) {
+  const idx = url.indexOf("(");
+  return idx < 0 ? url : url.substring(0, idx);
 }

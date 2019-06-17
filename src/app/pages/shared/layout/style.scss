@@ -180,7 +180,25 @@ $leave-duration: 0.25s;
     .content-root {
       overflow-y: auto;
       display: flex;
+      position: relative;
       flex-direction: column;
+
+      .section-outlet {
+        display: flex;
+        justify-content: space-around;
+        position: absolute;
+        height: calc(100vh - 50px);
+        top: 0;
+        width: 100%;
+
+        router-outlet {
+          display: none;
+        }
+      }
+
+      .outlet-hidden {
+        display: none;
+      }
     }
 
     .right-section {
