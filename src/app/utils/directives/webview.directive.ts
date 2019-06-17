@@ -1,4 +1,11 @@
-import { Directive, Input, ElementRef, OnChanges, Output, EventEmitter } from "@angular/core";
+import {
+  Directive,
+  Input,
+  ElementRef,
+  OnChanges,
+  Output,
+  EventEmitter
+} from "@angular/core";
 
 interface INativeWebview extends Element {
   src: string;
@@ -9,11 +16,10 @@ interface INativeWebview extends Element {
   selector: "webview"
 })
 export class WebviewDirective implements OnChanges {
-
   private ready = false;
 
   @Input()
-  public src: string = 'http://localhost:80';
+  public src = "http://localhost:80";
 
   @Output()
   public bootstrap = new EventEmitter<any>();
@@ -47,7 +53,7 @@ export class WebviewDirective implements OnChanges {
   constructor(private el: ElementRef) {
     this.webview.addEventListener("new-window", (event: any) => {
       this.webview.loadURL(event.url);
-    })
+    });
     this.webview.addEventListener("will-navigate", () => {
       this.navigationStart.emit();
     });
@@ -77,20 +83,23 @@ export class WebviewDirective implements OnChanges {
 
   public ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     for (const name in changes) {
-      if (!name) return;
-      const change = changes[name];
-      if (name === "src") {
-        const previous = (change.previousValue || "").split("#")[0];
-        const current = (change.currentValue || "").split("#")[0];
-        if (previous !== current) {
-          this.updateSrc(changes[name].currentValue);
+      if (name) {
+        const change = changes[name];
+        if (name === "src") {
+          const previous = (change.previousValue || "").split("#")[0];
+          const current = (change.currentValue || "").split("#")[0];
+          if (previous !== current) {
+            this.updateSrc(changes[name].currentValue);
+          }
         }
       }
     }
   }
 
   private updateSrc(src: string) {
-    if (!this.ready) return this.webview.src = src;
+    if (!this.ready) {
+      return (this.webview.src = src);
+    }
     this.webview.loadURL(src);
     this.navigationStart.emit();
   }

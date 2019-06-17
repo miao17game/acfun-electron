@@ -1,9 +1,16 @@
 <div class="electron-webview-container">
-    <div *ngIf="loading" class="electron-loading-container">
-        <loading [show]="loading"></loading>
-    </div>
-    <webview *ngIf="init" class="electron-webview" [src]="currentPath" (bootstrap)="onBootstrap($event)"
-        (startLoading)="onLoadingChanged($event)" (contentLoaded)="onLoadingChanged(false)"
-        (navigationStop)="onNavigationStop($event)" (titleChange)="onTitleChange($event)">
-    </webview>
+  <div *ngIf="loading" class="electron-loading-container">
+    <loading [show]="loading"></loading>
+  </div>
+  <webview
+    *ngIf="init"
+    class="electron-webview"
+    [src]="currentPath"
+    (bootstrap)="onBootstrap($event)"
+    (startLoading)="onLoadingChanged($event)"
+    (contentLoaded)="onLoadingChanged(false)"
+    (navigationStop)="onNavigationStop($event)"
+    (titleChange)="onTitleChange($event)"
+  >
+  </webview>
 </div>

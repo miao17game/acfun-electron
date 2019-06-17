@@ -2,55 +2,55 @@ import { Actions, Context } from "../helpers/context";
 import { CoreService } from "../providers/core.service";
 
 interface IWebContentState {
-    currentSrc: string;
-    webview: any;
-    loading: boolean;
+  currentSrc: string;
+  webview: any;
+  loading: boolean;
 }
 
 @Context()
 export class WebContentContext extends Actions<IWebContentState> {
-    protected readonly initial: IWebContentState = {
-        currentSrc: "https://www.acfun.cn/",
-        webview: {},
-        loading: false
-    };
+  protected readonly initial: IWebContentState = {
+    currentSrc: "https://www.acfun.cn/",
+    webview: {},
+    loading: false
+  };
 
-    public get currentSrc() {
-        return this.subject.getValue().currentSrc || '';
-    }
+  public get currentSrc() {
+    return this.subject.getValue().currentSrc || "";
+  }
 
-    public get currentWebview() {
-        return this.subject.getValue().webview || {};
-    }
+  public get currentWebview() {
+    return this.subject.getValue().webview || {};
+  }
 
-    public get isLinked() {
-        return !this.subject.getValue().loading;
-    }
+  public get isLinked() {
+    return !this.subject.getValue().loading;
+  }
 
-    constructor(private core: CoreService) {
-        super();
-    }
+  constructor(private core: CoreService) {
+    super();
+  }
 
-    public async init() { }
+  public async init() {}
 
-    public updateHost(webview: any) {
-        this.subject.next({
-            ...this.last,
-            webview
-        });
-    }
+  public updateHost(webview: any) {
+    this.subject.next({
+      ...this.last,
+      webview
+    });
+  }
 
-    public updateSrc(src: string) {
-        this.subject.next({
-            ...this.last,
-            currentSrc: src
-        });
-    }
+  public updateSrc(src: string) {
+    this.subject.next({
+      ...this.last,
+      currentSrc: src
+    });
+  }
 
-    public updateLoading(loading: boolean) {
-        this.subject.next({
-            ...this.last,
-            loading
-        });
-    }
+  public updateLoading(loading: boolean) {
+    this.subject.next({
+      ...this.last,
+      loading
+    });
+  }
 }
