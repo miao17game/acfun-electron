@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 @Injectable()
 export class HistoryService {
   private stack: string[] = [];
-  private index: number = 0;
+  private index = 0;
   private prevent = false;
 
   get current() {
@@ -47,6 +47,11 @@ export class HistoryService {
 
   replaceHistory(path: string) {
     this.stack[this.index - 1] = path;
+  }
+
+  clear() {
+    this.stack = [this.stack[this.index - 1]];
+    this.index = 1;
   }
 
   getBack() {
