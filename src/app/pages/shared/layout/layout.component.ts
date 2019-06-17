@@ -1,8 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 import { WebContentContext } from "../../../models/content.model";
+import { Title } from "@angular/platform-browser";
 
 const routes = {
   content: {
@@ -58,7 +59,7 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
+    private title: Title,
     private history: HistoryService,
     private core: CoreService,
     private webContent: WebContentContext
@@ -80,7 +81,7 @@ export class LayoutComponent implements OnInit {
 
   private onNavigationActionInvoke(method: "forward" | "back") {
     const url = this.history[method === "back" ? "getBack" : "getForward"]();
-    const isWebContent = url.startsWith("/content?src=");
+    const isWebContent = url.startsWith("webview::");
     const alreayInWebContent = this.isWebContent;
     if (isWebContent && alreayInWebContent) {
       return this.webContent.currentWebview[
@@ -88,8 +89,18 @@ export class LayoutComponent implements OnInit {
       ]();
     }
     if (isWebContent && !alreayInWebContent) {
+      const cont = url.split("::")[1];
+      const [component, qs] = cont.split("?");
+      const query = qs
+        .split(";")
+        .map(i => i.split("=") as any)
+        .reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
       this.webContent.updateSrc(decodeURIComponent(url.substring(13)));
-      return this.router.navigateByUrl(url);
+      return this.router
+        .navigate([{ outlets: { webview: [component, query], primary: null } }])
+        .then(() => {
+          this.title.setTitle(this.webContent.currentTitle);
+        });
     }
     return this.router.navigateByUrl(url);
   }

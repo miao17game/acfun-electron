@@ -4,6 +4,7 @@ import { CoreService } from "../providers/core.service";
 interface IWebContentState {
   currentSrc: string;
   webview: any;
+  title: string;
   loading: boolean;
 }
 
@@ -12,6 +13,7 @@ export class WebContentContext extends Actions<IWebContentState> {
   protected readonly initial: IWebContentState = {
     currentSrc: "https://www.acfun.cn/",
     webview: {},
+    title: "",
     loading: false
   };
 
@@ -21,6 +23,10 @@ export class WebContentContext extends Actions<IWebContentState> {
 
   public get currentWebview() {
     return this.subject.getValue().webview || {};
+  }
+
+  public get currentTitle() {
+    return this.subject.getValue().title || "";
   }
 
   public get isLinked() {
@@ -51,6 +57,13 @@ export class WebContentContext extends Actions<IWebContentState> {
     this.subject.next({
       ...this.last,
       loading
+    });
+  }
+
+  public updateTitle(title: string) {
+    this.subject.next({
+      ...this.last,
+      title
     });
   }
 }
