@@ -1,5 +1,4 @@
 import { Actions, Context } from "../helpers/context";
-import { CoreService } from "../providers/core.service";
 
 interface IWebContentState {
   currentSrc: string;
@@ -31,10 +30,6 @@ export class WebContentContext extends Actions<IWebContentState> {
 
   public get isLinked() {
     return !this.subject.getValue().loading;
-  }
-
-  constructor(private core: CoreService) {
-    super();
   }
 
   public async init() {}

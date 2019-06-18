@@ -1,0 +1,15 @@
+:host {
+  flex: 1;
+}
+
+.dashboard-container {
+  padding: 2%;
+
+  .webrule-container {
+    display: flex;
+
+    .webrule {
+      padding: 8px;
+    }
+  }
+}

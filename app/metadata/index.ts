@@ -16,6 +16,7 @@ export interface IPreferenceConfig {
   updateAt?: number;
   darkMode?: boolean;
   rootFolder?: string;
+  webRules?: any[];
 }
 
 export interface IAppFolderInit {
@@ -40,5 +41,9 @@ export enum ErrorCode {
 }
 
 export class AppError<T extends { [prop: string]: any } = any> {
-  constructor(public readonly code: ErrorCode, public readonly message: string, public readonly extras: T = <any>{}) {}
+  constructor(
+    public readonly code: ErrorCode,
+    public readonly message: string,
+    public readonly extras: T = <any>{}
+  ) {}
 }
