@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Router, NavigationEnd } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 import { WebContentContext } from "../../../models/content.model";
 import { RouterComponent } from "../../../utils/plugins/router-component";
+import { Subscription } from "rxjs";
 
 interface IRouteConf {
   label: string;
@@ -35,11 +36,14 @@ const configs: { [prop: string]: IRouteConf } = {
   templateUrl: "./layout.html",
   styleUrls: ["./style.scss"]
 })
-export class LayoutComponent extends RouterComponent implements OnInit {
+export class LayoutComponent extends RouterComponent
+  implements OnInit, OnDestroy {
   public showMenu = false;
   public showMsg = false;
-  public actions = buildActions.call(this);
-  public urls = buildRoutes.call(this);
+  public actions = buildActions(this);
+  public urls = buildRoutes(this);
+
+  private routerSubp!: Subscription;
 
   public get isPrimaryOutletShow() {
     return getPrimaryUrl(this.router.url) !== "/";
@@ -76,15 +80,19 @@ export class LayoutComponent extends RouterComponent implements OnInit {
   ) {
     super(router);
     this.core.initRouter(router, this.history.decide.bind(this.history));
+    this.routerSubp = this.router.events.subscribe(e => {
+      if (e instanceof NavigationEnd) {
+        this.changeRouteSelected();
+      }
+    });
   }
 
   ngOnInit() {}
 
-  isRouteSelected(match: RegExp | boolean) {
-    if (typeof match === "boolean") {
-      return match;
+  ngOnDestroy() {
+    if (this.routerSubp && !this.routerSubp.closed) {
+      this.routerSubp.unsubscribe();
     }
-    return match.test(this.router.url);
   }
 
   onMenuClick() {
@@ -134,37 +142,55 @@ export class LayoutComponent extends RouterComponent implements OnInit {
   onSettingsClick() {
     this.router.navigate([{ outlets: { primary: ["preference"] } }]);
   }
+
+  private changeRouteSelected() {
+    (this.urls || []).forEach(
+      each => (each.selected = this.isRouteSelected(each.match))
+    );
+  }
+
+  private isRouteSelected(match: RegExp | boolean) {
+    if (typeof match === "boolean") {
+      return match;
+    }
+    return match.test(this.router.url);
+  }
 }
 
-function buildActions(this: LayoutComponent) {
+function buildActions(instance: LayoutComponent) {
   const actions = {
     debug: {
       type: "plug",
       class: "icon-size-16",
-      onclick: this.onDebugClick.bind(this)
+      onclick: instance.onDebugClick.bind(instance)
     },
     settings: {
       type: "cog",
       class: "icon-size-19",
-      onclick: this.onSettingsClick.bind(this)
+      onclick: instance.onSettingsClick.bind(instance)
     },
     menu: {
       type: "navicon",
       class: "icon-size-18",
-      onclick: this.onMenuClick.bind(this)
+      onclick: instance.onMenuClick.bind(instance)
     }
   };
   return Object.keys(actions).map(k => actions[k]);
 }
 
-function buildRoutes(this: LayoutComponent) {
-  return Object.keys(configs).map<[() => any, string, RegExp | boolean]>(k => {
+function buildRoutes(instance: LayoutComponent) {
+  return Object.keys(configs).map<{
+    navigate: () => any;
+    label: string;
+    match: RegExp | boolean;
+    selected: boolean;
+  }>(k => {
     const item = configs[k];
     const navigation = item.navigate;
-    return [
-      () => {
-        this["showMenu"] = false;
-        return this["router"].navigate([
+    return {
+      navigate: () => {
+        // instance["showMenu"] = false;
+        return instance["router"].navigate([
           {
             outlets: Object.keys(navigation).reduce(
               (p, c) => ({
@@ -176,9 +202,10 @@ function buildRoutes(this: LayoutComponent) {
           }
         ]);
       },
-      item.label,
-      item.match || false
-    ];
+      label: item.label,
+      match: item.match || false,
+      selected: false
+    };
   });
 }
 

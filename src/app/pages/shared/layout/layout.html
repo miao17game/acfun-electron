@@ -60,11 +60,11 @@
       <div class="section-inner right-box">
         <div
           *ngFor="let eachUrl of urls"
-          (click)="eachUrl[0]()"
+          (click)="eachUrl.navigate()"
           class="router-link"
-          [ngClass]="{ 'router-link-active': isRouteSelected(eachUrl[2]) }"
+          [ngClass]="{ 'router-link-active': eachUrl.selected }"
         >
-          <span>{{ eachUrl[1] }}</span>
+          <span>{{ eachUrl.label }}</span>
         </div>
       </div>
     </div>
