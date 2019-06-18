@@ -1,7 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
 import { IpcMain, BrowserWindow } from "electron";
-import { DefaultEventLoader, createUnknownError, createStamp, Contract } from "./base";
+import {
+  DefaultEventLoader,
+  createUnknownError,
+  createStamp,
+  Contract
+} from "./base";
 import { ROOT_FOLDER, PREFERENCE_CONF, OS_HOME } from "../constants/paths";
 import {
   IFilesFetchContext,
@@ -31,9 +36,18 @@ export class EventLoader extends DefaultEventLoader {
   }
 
   @Contract(ClientEvent.FetchFiles)
-  public readLocalFiles({ folderPath = undefined, showHideFiles = false, lazyLoad = true }: IFilesFetchContext) {
+  public readLocalFiles({
+    folderPath,
+    showHideFiles = false,
+    lazyLoad = true
+  }: IFilesFetchContext) {
     const folder = connectFolder(folderPath);
-    const fies = readFiles({ path: folder, isRoot: true, showHideFiles, lazyLoad });
+    const fies = readFiles({
+      path: folder,
+      isRoot: true,
+      showHideFiles,
+      lazyLoad
+    });
     return {
       files: {
         ...fies,
@@ -45,18 +59,28 @@ export class EventLoader extends DefaultEventLoader {
   @Contract(ClientEvent.CopyFile)
   public copyFile({ sourcePath, targetPath }: ICopyFileOptions) {
     if (!fs.existsSync(sourcePath)) {
-      return new AppError(ErrorCode.FileNotFound, "file is not exist", { path: sourcePath });
+      return new AppError(ErrorCode.FileNotFound, "file is not exist", {
+        path: sourcePath
+      });
     }
     const fileName = path.basename(sourcePath);
     const toCopyPath = path.join(targetPath, fileName);
     return new Promise<boolean | AppError>(resolve => {
       fs.readFile(sourcePath, { encoding: "binary" }, (error, data) => {
         if (fs.existsSync(toCopyPath)) {
-          return resolve(new AppError(ErrorCode.FileAlreadyExist, "file is exist", { path: toCopyPath }));
+          return resolve(
+            new AppError(ErrorCode.FileAlreadyExist, "file is exist", {
+              path: toCopyPath
+            })
+          );
         }
-        if (error) return resolve(createUnknownError(error));
-        fs.writeFile(toCopyPath, data, { encoding: "binary" }, error => {
-          if (error) return resolve(createUnknownError(error));
+        if (error) {
+          return resolve(createUnknownError(error));
+        }
+        fs.writeFile(toCopyPath, data, { encoding: "binary" }, err => {
+          if (err) {
+            return resolve(createUnknownError(err));
+          }
           resolve(true);
         });
       });
@@ -65,9 +89,13 @@ export class EventLoader extends DefaultEventLoader {
 
   @Contract(ClientEvent.InitAppFolder)
   public initAppFolder({ folder = ROOT_FOLDER }: IAppFolderInit) {
-    if (fs.existsSync(folder)) return;
+    if (fs.existsSync(folder)) {
+      return;
+    }
     return new Promise<boolean | AppError>(resolve => {
-      fs.mkdir(folder, error => resolve(!error ? true : createUnknownError(error)));
+      fs.mkdir(folder, error =>
+        resolve(!error ? true : createUnknownError(error))
+      );
     });
   }
 
@@ -88,7 +116,11 @@ export class EventLoader extends DefaultEventLoader {
       updateAt: createStamp()
     };
     try {
-      fs.appendFileSync(PREFERENCE_CONF, JSON.stringify(preferenceConf, null, "  "), { flag: "w+" });
+      fs.appendFileSync(
+        PREFERENCE_CONF,
+        JSON.stringify(preferenceConf, null, "  "),
+        { flag: "w+" }
+      );
       return true;
     } catch (error) {
       return createUnknownError(error);
@@ -108,26 +140,36 @@ function connectFolder(folderPath: string | undefined) {
   return p;
 }
 
-function tryLoadPreference(path = PREFERENCE_CONF) {
+function tryLoadPreference(prePath = PREFERENCE_CONF) {
   let error: AppError;
   let preferenceConf: IPreferenceConfig;
   try {
-    if (!fs.existsSync(path)) {
+    const dirname = path.dirname(prePath);
+    if (!fs.existsSync(dirname)) {
+      fs.mkdirSync(dirname);
+    }
+    if (!fs.existsSync(prePath)) {
       const defaultConfigs = { updateAt: createStamp() };
-      fs.appendFileSync(path, JSON.stringify(defaultConfigs, null, "  "), { flag: "w+" });
+      fs.appendFileSync(prePath, JSON.stringify(defaultConfigs, null, "  "), {
+        flag: "w+"
+      });
       preferenceConf = defaultConfigs;
     } else {
-      const confStr = fs.readFileSync(path).toString();
+      const confStr = fs.readFileSync(prePath).toString();
       preferenceConf = JSON.parse(confStr);
     }
   } catch (_e) {
     if (_e.code === "ENOENT" && _e.errno === -2 && _e.syscall === "open") {
-      error = new AppError(ErrorCode.PreferenceNotFound, "preference file not found.", {
-        syscall: _e.syscall,
-        path: _e.path,
-        msg: _e.message,
-        stack: _e.stack
-      });
+      error = new AppError(
+        ErrorCode.PreferenceNotFound,
+        "preference file not found.",
+        {
+          syscall: _e.syscall,
+          path: _e.path,
+          msg: _e.message,
+          stack: _e.stack
+        }
+      );
     } else {
       error = createUnknownError(error);
     }
@@ -143,7 +185,12 @@ interface IReadFileOptions {
 }
 
 function readFiles(options: IReadFileOptions) {
-  const { path: thisPath, isRoot = false, lazyLoad = false, showHideFiles = false } = options;
+  const {
+    path: thisPath,
+    isRoot = false,
+    lazyLoad = false,
+    showHideFiles = false
+  } = options;
   const result: IFileFetchResult = {
     loaded: false,
     exist: false,
@@ -156,11 +203,14 @@ function readFiles(options: IReadFileOptions) {
   }
   result.exist = true;
   const children = fs.readdirSync(thisPath);
-  const finalChilds = (showHideFiles ? children : children.filter(i => !i.startsWith("."))).map(p =>
-    path.resolve(thisPath, p)
-  );
+  const finalChilds = (showHideFiles
+    ? children
+    : children.filter(i => !i.startsWith("."))
+  ).map(p => path.resolve(thisPath, p));
   for (const each of finalChilds) {
-    if (lazyLoad && !isRoot) break;
+    if (lazyLoad && !isRoot) {
+      break;
+    }
     const status = fs.lstatSync(each);
     if (status.isDirectory()) {
       result.folders.push(readFiles({ ...options, path: each, isRoot: false }));
