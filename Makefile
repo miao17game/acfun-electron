@@ -3,23 +3,22 @@ install:
 
 dev-app:
 	rm -rf build
-	yarn run electron:serve
+	cd server && yarn start
 
 dev-ng:
-	yarn run ng:serve
+	cd client && yarn start
 
-start:
+build-only:
+	rm -rf dist
 	rm -rf build
-	yarn start
+	cd client && ng build -c production
+	cd server && yarn postinstall:electron && yarn electron:build
 
-build-local:
-	rm -rf build
-	yarn run electron:local
+build-local: build-only
+	yarn start:local
 
-build-mac:
-	rm -rf build
-	yarn run electron:mac
+build-mac: build-only
+	cd server && npx electron-builder ../build --mac
 
-build-win:
-	rm -rf build
-	yarn run electron:windows
+build-win: build-only
+	cd server && npx electron-builder ../build --windows

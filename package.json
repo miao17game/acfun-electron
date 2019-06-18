@@ -4,5 +4,8 @@
   "main": "build/main.js",
   "repository": "https://github.com/miao17game/acfun-electron.git",
   "author": "Big Mogician <sunaoran@youzan.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start:local": "cd build && npx electron main.js"
+  }
 }
