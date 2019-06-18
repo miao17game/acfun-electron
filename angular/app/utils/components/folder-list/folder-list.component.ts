@@ -1,5 +1,14 @@
-import { Component, OnInit, OnChanges, Input, Output, EventEmitter, ContentChild, TemplateRef } from "@angular/core";
-import { IFolderStruct } from "../../../../../app/metadata";
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  Input,
+  Output,
+  EventEmitter,
+  ContentChild,
+  TemplateRef
+} from "@angular/core";
+import { IFolderStruct } from "../../../../../electron/metadata";
 
 interface IViewContext {
   loaded: boolean;

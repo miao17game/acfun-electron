@@ -20,7 +20,7 @@
   },
   "include": [
     "main.ts",
-    "src/**/*",
+    "angular/**/*",
     "app"
   ],
   "exclude": [
