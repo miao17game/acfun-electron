@@ -1,30 +1,30 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "$schema": "node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "start-acfun-electron": {
       "root": "",
-      "sourceRoot": "client",
+      "sourceRoot": ".",
       "projectType": "application",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "client/index.html",
-            "main": "client/main.ts",
-            "tsConfig": "client/tsconfig.app.json",
-            "polyfills": "client/polyfills.ts",
+            "outputPath": "../dist",
+            "index": "./index.html",
+            "main": "./main.ts",
+            "tsConfig": "./tsconfig.app.json",
+            "polyfills": "./polyfills.ts",
             "assets": [
-              "client/assets",
-              "client/favicon.ico",
-              "client/favicon.png",
-              "client/favicon.icns",
-              "client/favicon.256x256.png",
-              "client/favicon.512x512.png"
+              "./assets",
+              "./favicon.ico",
+              "./favicon.png",
+              "./favicon.icns",
+              "./favicon.256x256.png",
+              "./favicon.512x512.png"
             ],
-            "styles": ["client/styles/global.scss"],
+            "styles": ["./styles/global.scss"],
             "scripts": []
           },
           "configurations": {
@@ -40,8 +40,8 @@
               "buildOptimizer": false,
               "fileReplacements": [
                 {
-                  "replace": "client/environments/environment.ts",
-                  "with": "client/environments/environment.dev.ts"
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.dev.ts"
                 }
               ]
             },
@@ -57,8 +57,8 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "client/environments/environment.ts",
-                  "with": "client/environments/environment.prod.ts"
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.prod.ts"
                 }
               ]
             }
@@ -79,37 +79,34 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "../node_modules/build-angular:extract-i18n",
           "options": {
             "browserTarget": "start-acfun-electron:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "../node_modules/build-angular:karma",
           "options": {
-            "main": "client/test.ts",
-            "polyfills": "client/polyfills-test.ts",
-            "tsConfig": "client/tsconfig.spec.json",
-            "karmaConfig": "client/karma.conf.js",
+            "main": "./test.ts",
+            "polyfills": "./polyfills-test.ts",
+            "tsConfig": "./tsconfig.spec.json",
+            "karmaConfig": "./karma.conf.js",
             "scripts": [],
-            "styles": ["client/styles.scss"],
+            "styles": ["./styles.scss"],
             "assets": [
-              "client/assets",
-              "client/favicon.ico",
-              "client/favicon.png",
-              "client/favicon.icns",
-              "client/favicon.256x256.png",
-              "client/favicon.512x512.png"
+              "./assets",
+              "./favicon.ico",
+              "./favicon.png",
+              "./favicon.icns",
+              "./favicon.256x256.png",
+              "./favicon.512x512.png"
             ]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "client/tsconfig.app.json",
-              "client/tsconfig.spec.json"
-            ],
+            "tsConfig": ["./tsconfig.app.json", "./tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }

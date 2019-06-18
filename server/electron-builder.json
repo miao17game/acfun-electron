@@ -1,19 +1,19 @@
 {
   "productName": "acfun-electron.electron",
   "directories": {
-    "output": "release/"
+    "output": "../release/"
   },
-  "files": ["build/**/*", "dist/**/*"],
+  "files": ["../build/**/*", "../dist/**/*"],
   "win": {
-    "icon": "dist",
+    "icon": "../dist",
     "target": ["portable"]
   },
   "mac": {
-    "icon": "dist",
+    "icon": "../dist",
     "target": ["dmg"]
   },
   "linux": {
-    "icon": "dist",
+    "icon": "../dist",
     "target": ["AppImage"]
   }
 }

@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
 import * as url from "url";
 
-import { EventLoader } from "./server/loaders";
+import { EventLoader } from "./loaders";
 
 let win: BrowserWindow, serve: boolean;
 const args = process.argv.slice(1);
