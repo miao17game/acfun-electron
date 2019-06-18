@@ -62,6 +62,7 @@
           *ngFor="let eachUrl of urls"
           (click)="eachUrl[0]()"
           class="router-link"
+          [ngClass]="{ 'router-link-active': isRouteSelected(eachUrl[2]) }"
         >
           <span>{{ eachUrl[1] }}</span>
         </div>

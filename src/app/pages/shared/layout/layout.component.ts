@@ -9,19 +9,23 @@ import { RouterComponent } from "../../../utils/plugins/router-component";
 interface IRouteConf {
   label: string;
   navigate: { [prop: string]: any[] | string | false };
+  match?: RegExp;
 }
 
 const configs: { [prop: string]: IRouteConf } = {
   content: {
     label: "认真你就输了",
+    match: /\/.?\(webview:.+\)/gi,
     navigate: { webview: ["content"], primary: false }
   },
   dashboard: {
     label: "控制台",
+    match: /^\/dashboard.?/gi,
     navigate: { primary: ["dashboard"] }
   },
   preference: {
     label: "偏好设置",
+    match: /^\/preference.?/gi,
     navigate: { primary: ["preference"] }
   }
 };
@@ -75,6 +79,13 @@ export class LayoutComponent extends RouterComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  isRouteSelected(match: RegExp | boolean) {
+    if (typeof match === "boolean") {
+      return match;
+    }
+    return match.test(this.router.url);
+  }
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
@@ -146,8 +157,8 @@ function buildActions(this: LayoutComponent) {
   return Object.keys(actions).map(k => actions[k]);
 }
 
-function buildRoutes(this: LayoutComponent): [() => any, string][] {
-  return Object.keys(configs).map<[() => any, string]>(k => {
+function buildRoutes(this: LayoutComponent) {
+  return Object.keys(configs).map<[() => any, string, RegExp | boolean]>(k => {
     const item = configs[k];
     const navigation = item.navigate;
     return [
@@ -165,7 +176,8 @@ function buildRoutes(this: LayoutComponent): [() => any, string][] {
           }
         ]);
       },
-      item.label
+      item.label,
+      item.match || false
     ];
   });
 }
