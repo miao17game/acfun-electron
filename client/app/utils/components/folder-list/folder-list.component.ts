@@ -8,7 +8,7 @@ import {
   ContentChild,
   TemplateRef
 } from "@angular/core";
-import { IFolderStruct } from "../../../../../electron/metadata";
+import { IFolderStruct } from "../../../../../server/metadata";
 
 interface IViewContext {
   loaded: boolean;

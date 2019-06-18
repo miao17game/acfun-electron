@@ -1,5 +1,5 @@
 import { Actions, Context } from "../helpers/context";
-import { IPreferenceConfig } from "../../../electron/metadata";
+import { IPreferenceConfig } from "../../../server/metadata";
 import { CoreService } from "../providers/core.service";
 
 const defaultRule = {

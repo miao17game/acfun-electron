@@ -7,12 +7,12 @@ import {
 } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
-import { ClientEvent } from "../../../electron/constants/events";
+import { ClientEvent } from "../../../server/constants/events";
 import {
   IFolderStruct,
   IPreferenceConfig,
   ICopyFileOptions
-} from "../../../electron/metadata";
+} from "../../../server/metadata";
 import {
   IpcPromiseLoader,
   DefineValidate,

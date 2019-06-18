@@ -1,5 +1,5 @@
 import { Actions, Context } from "../helpers/context";
-import { IFolderStruct } from "../../../electron/metadata";
+import { IFolderStruct } from "../../../server/metadata";
 import { CoreService } from "../providers/core.service";
 
 interface IDashboardState {
