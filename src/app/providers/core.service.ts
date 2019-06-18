@@ -1,10 +1,23 @@
 import { Injectable } from "@angular/core";
-import { Router, NavigationEnd, RouterState, ActivatedRoute } from "@angular/router";
+import {
+  Router,
+  NavigationEnd,
+  RouterState,
+  ActivatedRoute
+} from "@angular/router";
 import { Title } from "@angular/platform-browser";
 import { ElectronService } from "./electron.service";
 import { ClientEvent } from "../../../app/constants/events";
-import { IFolderStruct, IPreferenceConfig, ICopyFileOptions } from "../../../app/metadata";
-import { IpcPromiseLoader, DefineValidate, Contract } from "../helpers/ipc-promise";
+import {
+  IFolderStruct,
+  IPreferenceConfig,
+  ICopyFileOptions
+} from "../../../app/metadata";
+import {
+  IpcPromiseLoader,
+  DefineValidate,
+  Contract
+} from "../helpers/ipc-promise";
 
 interface ICoreContract {
   debugToolSwitch(): void;
@@ -16,7 +29,8 @@ interface ICoreContract {
 
 @Injectable()
 @DefineValidate(r => r === true)
-export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICoreContract {
+export class CoreService extends IpcPromiseLoader<ICoreContract>
+  implements ICoreContract {
   constructor(private title: Title, electron: ElectronService) {
     super(electron.ipcRenderer);
   }
@@ -24,7 +38,10 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
   public initRouter(router: Router, afterNavigate: (router: Router) => void) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        const title = this.getTitle(router.routerState, router.routerState.root).join("-");
+        const title = this.getTitle(
+          router.routerState,
+          router.routerState.root
+        ).join("-");
         this.title.setTitle(title);
         afterNavigate(router);
       }
@@ -48,7 +65,11 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     validate: () => true
   })
   public dashboardFetch(subPath?: string): Promise<IFolderStruct> {
-    return this.async({ folderPath: subPath, showHideFiles: false, lazyLoad: true });
+    return this.async({
+      folderPath: subPath,
+      showHideFiles: false,
+      lazyLoad: true
+    });
   }
 
   @Contract(ClientEvent.FetchPreferences, {
@@ -64,7 +85,7 @@ export class CoreService extends IpcPromiseLoader<ICoreContract> implements ICor
     resolve: () => undefined
   })
   public preferenceUpdate(configs: Partial<IPreferenceConfig>): Promise<void> {
-    return this.async(configs);
+    return this.async({ configs });
   }
 
   @Contract(ClientEvent.CopyFile)

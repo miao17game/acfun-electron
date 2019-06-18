@@ -106,6 +106,7 @@ export class EventLoader extends DefaultEventLoader {
 
   @Contract(ClientEvent.UpdatePreferences)
   public updatePreference({ configs = {} }: IUpdatePreferenceOptions) {
+    console.log(configs);
     const { configs: sourceConfs, error: errors } = tryLoadPreference();
     if (errors) {
       return errors;

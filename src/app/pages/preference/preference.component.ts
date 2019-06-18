@@ -20,6 +20,7 @@ export class PreferenceComponent implements OnInit {
   ngOnInit() {}
 
   onDarkModeChange(value: boolean) {
+    console.log({ darkMode: value });
     this.actions.updateConfigs({ darkMode: value });
   }
 }

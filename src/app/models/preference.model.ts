@@ -28,14 +28,6 @@ export class PreferenceContext extends Actions<IPreferenceState> {
       this.update({ init: true });
     } catch (error) {
       console.log(error);
-      try {
-        await this.core.preferenceUpdate({});
-        const result = await this.core.preferenceFetch();
-        this.update(result);
-        this.update({ init: true });
-      } catch (error) {
-        console.log(error);
-      }
     }
   }
 
