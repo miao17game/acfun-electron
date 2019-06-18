@@ -101,11 +101,9 @@ export class LayoutComponent extends RouterComponent implements OnInit {
         .map(i => i.split("=") as any)
         .reduce((p, c) => ({ ...p, [c[0]]: c[1] }), {});
       this.webContent.updateSrc(decodeURIComponent(url.substring(13)));
-      return this.router
-        .navigate([{ outlets: { webview: [component, query], primary: null } }])
-        .then(() => {
-          this.title.setTitle(this.webContent.currentTitle);
-        });
+      return this.openWebview([component, query]).then(() => {
+        this.title.setTitle(this.webContent.currentTitle);
+      });
     }
     return this.router.navigateByUrl(url);
   }
@@ -153,8 +151,9 @@ function buildRoutes(this: LayoutComponent): [() => any, string][] {
     const item = configs[k];
     const navigation = item.navigate;
     return [
-      () =>
-        this["router"].navigate([
+      () => {
+        this["showMenu"] = false;
+        return this["router"].navigate([
           {
             outlets: Object.keys(navigation).reduce(
               (p, c) => ({
@@ -164,7 +163,8 @@ function buildRoutes(this: LayoutComponent): [() => any, string][] {
               {}
             )
           }
-        ]),
+        ]);
+      },
       item.label
     ];
   });

@@ -182,11 +182,14 @@ $leave-duration: 0.25s;
 
       .right-box {
         flex: unset;
+        width: 240px;
         background-color: $primary-weak-color;
         color: $font-main-color;
+        transform: translateX(0);
       }
 
       .msg-box {
+        width: 240px;
         padding: 8px;
         background-color: $msg-box-color;
         box-shadow: 0px 0px 8px 0px #00000090;
@@ -233,7 +236,7 @@ $leave-duration: 0.25s;
       color: transparent;
       transition: $leave-duration;
 
-      div {
+      .section-inner {
         display: none;
       }
     }
