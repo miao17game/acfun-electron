@@ -6,9 +6,15 @@ import { RouterModule } from "@angular/router";
 import { PreferenceComponent } from "./preference/preference.component";
 import { ContentComponent } from "./content/content.component";
 import { DirectivesModule } from "../utils/directives/directives.module";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 @NgModule({
-  declarations: [LayoutComponent, PreferenceComponent, ContentComponent],
+  declarations: [
+    LayoutComponent,
+    DashboardComponent,
+    PreferenceComponent,
+    ContentComponent
+  ],
   imports: [RouterModule, CommonModule, ComponentsModule, DirectivesModule],
   exports: [LayoutComponent]
 })

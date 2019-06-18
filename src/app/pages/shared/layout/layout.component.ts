@@ -1,22 +1,28 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Title } from "@angular/platform-browser";
 import { HistoryService } from "../../../providers/history.service";
 import { CoreService } from "../../../providers/core.service";
 import { WebContentContext } from "../../../models/content.model";
-import { Title } from "@angular/platform-browser";
+import { RouterComponent } from "../../../utils/plugins/router-component";
 
-const routes = {
+interface IRouteConf {
+  label: string;
+  navigate: { [prop: string]: any[] | string | false };
+}
+
+const configs: { [prop: string]: IRouteConf } = {
   content: {
     label: "认真你就输了",
-    action: (router: Router) => {
-      router.navigate([{ outlets: { webview: ["content"], primary: null } }]);
-    }
+    navigate: { webview: ["content"], primary: false }
+  },
+  dashboard: {
+    label: "控制台",
+    navigate: { primary: ["dashboard"] }
   },
   preference: {
     label: "偏好设置",
-    action: (router: Router) => {
-      router.navigate([{ outlets: { primary: ["preference"] } }]);
-    }
+    navigate: { primary: ["preference"] }
   }
 };
 
@@ -25,11 +31,11 @@ const routes = {
   templateUrl: "./layout.html",
   styleUrls: ["./style.scss"]
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent extends RouterComponent implements OnInit {
   public showMenu = false;
   public showMsg = false;
-  public urls: [() => any, string][] = [];
-  public actions = buildActions(this);
+  public actions = buildActions.call(this);
+  public urls = buildRoutes.call(this);
 
   public get isPrimaryOutletShow() {
     return getPrimaryUrl(this.router.url) !== "/";
@@ -58,18 +64,17 @@ export class LayoutComponent implements OnInit {
   }
 
   constructor(
-    private router: Router,
+    router: Router,
     private title: Title,
     private history: HistoryService,
     private core: CoreService,
     private webContent: WebContentContext
   ) {
+    super(router);
     this.core.initRouter(router, this.history.decide.bind(this.history));
   }
 
-  ngOnInit() {
-    this.urls = buildRoutes(this.router);
-  }
+  ngOnInit() {}
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
@@ -122,39 +127,46 @@ export class LayoutComponent implements OnInit {
   }
 }
 
-function buildActions(target: LayoutComponent) {
+function buildActions(this: LayoutComponent) {
   const actions = {
     debug: {
       type: "plug",
       class: "icon-size-16",
-      onclick: target.onDebugClick.bind(target)
+      onclick: this.onDebugClick.bind(this)
     },
     settings: {
       type: "cog",
       class: "icon-size-19",
-      onclick: target.onSettingsClick.bind(target)
+      onclick: this.onSettingsClick.bind(this)
     },
-    // message: {
-    //   type: "comments",
-    //   class: "icon-size-19",
-    //   onclick: target.onMessageBarClick.bind(target)
-    // },
     menu: {
       type: "navicon",
       class: "icon-size-18",
-      onclick: target.onMenuClick.bind(target)
+      onclick: this.onMenuClick.bind(this)
     }
   };
   return Object.keys(actions).map(k => actions[k]);
 }
 
-function buildRoutes(router: Router): [() => any, string][] {
-  return Object.keys(routes).map<[() => any, string]>(k => {
-    const item = routes[k];
-    if ("action" in item) {
-      return [() => item.action(router), item.label];
-    }
-    return [() => router.navigateByUrl(`/${k}`), item.label];
+function buildRoutes(this: LayoutComponent): [() => any, string][] {
+  return Object.keys(configs).map<[() => any, string]>(k => {
+    const item = configs[k];
+    const navigation = item.navigate;
+    return [
+      () =>
+        this["router"].navigate([
+          {
+            outlets: Object.keys(navigation).reduce(
+              (p, c) => ({
+                ...p,
+                [c]: navigation[c] === false ? null : navigation[c]
+              }),
+              {}
+            )
+          }
+        ]),
+      item.label
+    ];
   });
 }
 

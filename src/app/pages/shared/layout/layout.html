@@ -51,19 +51,20 @@
         <router-outlet></router-outlet>
       </div>
     </div>
-    <div
-      class="section right-section msg-box"
-      [ngClass]="{ 'no-display': !showMsg }"
-    >
-      <div class="message-item">暂时没有新消息。</div>
+    <div class="section slide-section" [ngClass]="{ 'no-display': !showMsg }">
+      <div class="section-inner right-box msg-box">
+        <div class="message-item">暂时没有新消息。</div>
+      </div>
     </div>
-    <div class="section right-section" [ngClass]="{ 'no-display': !showMenu }">
-      <div
-        *ngFor="let eachUrl of urls"
-        (click)="eachUrl[0]()"
-        class="router-link"
-      >
-        <span>{{ eachUrl[1] }}</span>
+    <div class="section slide-section" [ngClass]="{ 'no-display': !showMenu }">
+      <div class="section-inner right-box">
+        <div
+          *ngFor="let eachUrl of urls"
+          (click)="eachUrl[0]()"
+          class="router-link"
+        >
+          <span>{{ eachUrl[1] }}</span>
+        </div>
       </div>
     </div>
   </div>

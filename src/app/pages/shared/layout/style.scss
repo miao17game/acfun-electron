@@ -174,7 +174,23 @@ $leave-duration: 0.25s;
     box-sizing: border-box;
 
     .section {
-      flex: 1;
+      .section-inner {
+        flex: 1;
+        box-shadow: 0px 0px 8px 0px #00000090;
+        height: 100%;
+      }
+
+      .right-box {
+        flex: unset;
+        background-color: $primary-weak-color;
+        color: $font-main-color;
+      }
+
+      .msg-box {
+        padding: 8px;
+        background-color: $msg-box-color;
+        box-shadow: 0px 0px 8px 0px #00000090;
+      }
     }
 
     .content-root {
@@ -182,6 +198,7 @@ $leave-duration: 0.25s;
       display: flex;
       position: relative;
       flex-direction: column;
+      flex: 1;
 
       .section-outlet {
         display: flex;
@@ -190,6 +207,7 @@ $leave-duration: 0.25s;
         height: calc(100vh - 50px);
         top: 0;
         width: 100%;
+        background-color: #fff;
 
         router-outlet {
           display: none;
@@ -201,19 +219,11 @@ $leave-duration: 0.25s;
       }
     }
 
-    .right-section {
-      flex: unset;
+    .slide-section {
+      position: relative;
       width: 240px;
-      background-color: $primary-weak-color;
-      color: $font-main-color;
+      opacity: 1;
       transition: $enter-duration;
-      box-shadow: 0px 0px 6px 0px #00000090;
-    }
-
-    .msg-box {
-      padding: 8px;
-      background-color: $msg-box-color;
-      box-shadow: 0px 0px 6px 0px #00000090;
     }
 
     .no-display {
