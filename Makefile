@@ -20,7 +20,7 @@ build-local: build-only
 	yarn start:local
 
 build-mac: build-only
-	npx electron-builder ../build --mac
+	npx electron-builder build --mac
 
 build-win: build-only
-	npx electron-builder ../build --windows
+	npx electron-builder build --windows
