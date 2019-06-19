@@ -45,6 +45,7 @@ function createWindow() {
     win = null;
   });
 
+  // tslint:disable-next-line: no-unused-expression
   new EventLoader(win, ipcMain);
 }
 

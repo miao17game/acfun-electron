@@ -34,12 +34,16 @@ export class ElectronService {
 
   private heckIpcRendererWithNgZone() {
     const { ngZone } = this;
-    const ipcRenderer = window.require("electron").ipcRenderer;
-    this.ipcRenderer = new Proxy(ipcRenderer, {
+    const renderer = window.require("electron").ipcRenderer;
+    this.ipcRenderer = new Proxy(renderer, {
       get(target, name) {
         if (name === "on" || name === "once") {
           return (key: string, handler: Function) =>
-            target[name](key, handler && ((...args: any[]) => ngZone.run(() => handler(...args))));
+            target[name](
+              key,
+              handler &&
+                ((...args: any[]) => ngZone.run(() => handler(...args)))
+            );
         }
         return target[name];
       }

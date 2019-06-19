@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "yarn postinstall:electron",
     "postinstall:electron": "node postinstall",
-    "electron:tsc-serve": "tsc -p tsconfig-serve.json",
+    "electron:tsc-serve": "tsc -p tsconfig.json",
     "electron:tsc-build": "tsc -p tsconfig-build.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && yarn electron:tsc-serve && electron ./temp/main.js --serve",
     "electron:build": "yarn electron:tsc-build && node ./build.js && cd ../build && yarn --registry https://registry.npm.taobao.org/",
