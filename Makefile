@@ -1,5 +1,7 @@
 install:
-	ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/" yarn --registry https://registry.npm.taobao.org
+	cd client && yarn
+	cd server && ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/" yarn --registry https://registry.npm.taobao.org
+	npx electron-builder install-app-deps
 
 dev-app:
 	rm -rf build
@@ -17,7 +19,7 @@ build-only:
 build-local: build-only
 	yarn start:local
 
-build-mac: build-only
+build-mac:
 	cd server && npx electron-builder ../build --mac
 
 build-win: build-only

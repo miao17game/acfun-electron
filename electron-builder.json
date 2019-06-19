@@ -1,7 +1,8 @@
 {
   "productName": "acfun-electron.electron",
   "directories": {
-    "output": "../release/"
+    "output": "../release/",
+    "buildResources": "../build"
   },
   "files": ["../build/**/*", "../dist/**/*"],
   "win": {
