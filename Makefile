@@ -19,8 +19,8 @@ build-only:
 build-local: build-only
 	yarn start:local
 
-build-mac:
-	cd server && npx electron-builder ../build --mac
+build-mac: build-only
+	npx electron-builder ../build --mac
 
 build-win: build-only
-	cd server && npx electron-builder ../build --windows
+	npx electron-builder ../build --windows
