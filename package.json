@@ -9,6 +9,7 @@
     "start:local": "cd build && npx electron main.js"
   },
   "devDependencies": {
-    "electron-builder": "20.36.2"
+    "electron-builder": "20.36.2",
+    "tslint": "5.11.0"
   }
 }
