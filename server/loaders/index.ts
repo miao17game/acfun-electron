@@ -21,6 +21,10 @@ import {
 import { ClientEvent } from "../constants/events";
 
 export class EventLoader extends DefaultEventLoader {
+  public static Create(win: BrowserWindow, ipcMain: IpcMain) {
+    return new EventLoader(win, ipcMain);
+  }
+
   constructor(private win: BrowserWindow, ipcMain: IpcMain) {
     super(ipcMain);
   }
